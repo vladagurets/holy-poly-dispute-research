@@ -1,0 +1,11 @@
+[Unit]
+Description=Run holy-poly-dispute-research every hour
+Requires=holy-poly-dispute-research.service
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+AccuracySec=5min
+
+[Install]
+WantedBy=timers.target

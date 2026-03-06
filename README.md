@@ -88,6 +88,31 @@ You will be prompted for your sudo password.
 - **Follow logs live:**  
   `sudo journalctl -u holy-poly-dispute-research.service -f`
 
+### Stop and remove the timer
+To fully stop and remove the timer and service (e.g. before uninstalling or moving the project):
+```bash
+sudo systemctl stop holy-poly-dispute-research.timer
+sudo systemctl disable holy-poly-dispute-research.timer
+sudo rm /etc/systemd/system/holy-poly-dispute-research.service /etc/systemd/system/holy-poly-dispute-research.timer
+sudo systemctl daemon-reload
+```
+After this, the timer will not run or start on boot.
+
+### After updating source code
+The service runs `python3` from your **project directory**, so it always uses the files on disk. After you pull or edit code:
+
+- **If you only changed Python code or `.env`:**  
+  No need to reinstall. The next run (on the hour) will already use the updated code. To run once immediately with the new code:
+  ```bash
+  sudo systemctl start holy-poly-dispute-research.service
+  ```
+
+- **If you changed the systemd unit files** (`systemd/holy-poly-dispute-research.service` or `.timer`), or you want to be sure the timer is using the latest units:  
+  Re-run the install script. It will overwrite the units in `/etc/systemd/system/`, reload systemd, and restart the timer:
+  ```bash
+  ./install-systemd-timer.sh
+  ```
+
 ## Message format
 Header + list of markets. New markets are prefixed with 🟢.
 
